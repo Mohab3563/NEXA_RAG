@@ -1,6 +1,6 @@
 import type { UploadResponse, QueryResponse } from '@/types';
 
-const BASE_URL = 'nexadeploy-production.up.railway.app';
+const BASE_URL = 'https://nexadeploy-production.up.railway.app';
 
 const DEFAULT_HEADERS: Record<string, string> = {
   'ngrok-skip-browser-warning': '69420',
