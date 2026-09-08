@@ -1,6 +1,6 @@
 import type { UploadResponse, QueryResponse } from '@/types';
 
-const BASE_URL = 'https://pension-prodigal-tassel.ngrok-free.dev';
+const BASE_URL = 'https://nexadeploy-production.up.railway.app';
 
 const DEFAULT_HEADERS: Record<string, string> = {
   'ngrok-skip-browser-warning': '69420',
