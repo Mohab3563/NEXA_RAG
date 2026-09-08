@@ -15,7 +15,8 @@ const DEFAULT_HEADERS: Record<string, string> = {
 function getUserId(): string {
   let userId = sessionStorage.getItem('nexa_user_id');
   if (!userId) {
-    userId = 'user_' + Math.random().toString(36.substring(2, 11));
+    // FIX: .toString(36) must be called first before .substring()
+    userId = 'user_' + Math.random().toString(36).substring(2, 11);
     sessionStorage.setItem('nexa_user_id', userId);
   }
   return userId;
