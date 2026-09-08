@@ -8,16 +8,15 @@ const DEFAULT_HEADERS: Record<string, string> = {
 };
 
 /**
- * Helper to get or create a unique user session ID.
- * Stored in sessionStorage so it persists during the tab session 
- * and clears when the browser/tab is closed.
+ * Helper to get or create a unique per-tab session ID using window.name.
+ * This ensures that duplicating a tab or opening a new instance gets 
+ * its own isolated session workspace without sharing state.
  */
 function getUserId(): string {
-  let userId = sessionStorage.getItem('nexa_user_id');
-  if (!userId) {
-    // FIX: .toString(36) must be called first before .substring()
+  let userId = window.name;
+  if (!userId || !userId.startsWith('user_')) {
     userId = 'user_' + Math.random().toString(36).substring(2, 11);
-    sessionStorage.setItem('nexa_user_id', userId);
+    window.name = userId; // Bind the ID specifically to this browser tab instance
   }
   return userId;
 }
