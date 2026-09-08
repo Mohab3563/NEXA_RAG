@@ -8,15 +8,15 @@ const DEFAULT_HEADERS: Record<string, string> = {
 };
 
 /**
- * Helper to get or create a unique per-tab session ID using window.name.
- * This ensures that duplicating a tab or opening a new instance gets 
- * its own isolated session workspace without sharing state.
+ * Helper to get or create a unique persistent user ID using localStorage.
+ * This guarantees that separate browser profiles/accounts have completely
+ * independent workspaces without sharing state.
  */
 function getUserId(): string {
-  let userId = window.name;
-  if (!userId || !userId.startsWith('user_')) {
+  let userId = localStorage.getItem('nexa_user_id');
+  if (!userId) {
     userId = 'user_' + Math.random().toString(36).substring(2, 11);
-    window.name = userId; // Bind the ID specifically to this browser tab instance
+    localStorage.setItem('nexa_user_id', userId);
   }
   return userId;
 }
