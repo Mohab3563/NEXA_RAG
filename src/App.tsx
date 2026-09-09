@@ -9,7 +9,34 @@ import { ChatInput } from '@/components/ChatInput';
 import { queryRag } from '@/lib/api';
 import type { ChatMessage, UploadedDocument } from '@/types';
 
+const BASE_URL = 'https://nexadeploy-production.up.railway.app';
+
+/**
+ * Hook to automatically trigger backend user data cleanup using navigator.sendBeacon
+ * when the user refreshes or closes the page.
+ */
+function useRefreshCleanup() {
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const userId = localStorage.getItem('nexa_user_id');
+      if (userId) {
+        const url = `${BASE_URL}/cleanup/${userId}`;
+        // sendBeacon ensures the HTTP request fires reliably during page refresh or close
+        navigator.sendBeacon(url);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+}
+
 function App() {
+  // Automatically bind the refresh/unload cleanup listener
+  useRefreshCleanup();
+
   const [documents, setDocuments] = useState<UploadedDocument[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [selectedDocument, setSelectedDocument] = useState<string>('ALL');
