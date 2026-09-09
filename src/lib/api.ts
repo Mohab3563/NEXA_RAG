@@ -21,6 +21,19 @@ function getUserId(): string {
   return userId;
 }
 
+/**
+ * Triggers the backend cleanup route using navigator.sendBeacon
+ * to wipe user files and vectors upon page refresh or tab closure.
+ */
+export function cleanupWorkspace(): void {
+  const userId = localStorage.getItem('nexa_user_id');
+  if (userId) {
+    const url = `${BASE_URL}/cleanup/${userId}`;
+    // sendBeacon fires reliably during browser teardown/refresh
+    navigator.sendBeacon(url);
+  }
+}
+
 export async function uploadDocument(file: File): Promise<UploadResponse> {
   const formData = new FormData();
   formData.append('file', file);
